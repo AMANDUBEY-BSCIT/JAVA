@@ -1,0 +1,159 @@
+import java.util.*;
+public class CarRentalSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Car> list = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n--- Car Rental System ---");
+            System.out.println("1. Add Car");
+            System.out.println("2. View Cars");
+            System.out.println("3. Rent Car");
+            System.out.println("4. Return Car");
+            System.out.println("5. Search Car");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                // ADD CAR
+                case 1:
+                    System.out.print("Enter Car ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Car Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Rent Price: ");
+                    double price = sc.nextDouble();
+
+                    list.add(new Car(id, name, price));
+                    System.out.println("Car Added!");
+                    break;
+
+                // VIEW
+                case 2:
+                    for (Car c : list) {
+                        String status = c.isRented ? "Rented" : "Available";
+                        System.out.println("ID: " + c.id + ", Name: " + c.name +
+                                ", Price: " + c.price + ", Status: " + status);
+                    }
+                    break;
+
+                // RENT
+                case 3:
+                    System.out.println("1. Rent by ID");
+                    System.out.println("2. Rent by Name");
+                    int rc = sc.nextInt();
+                    sc.nextLine();
+
+                    if (rc == 1) {
+                        System.out.print("Enter ID: ");
+                        int rid = sc.nextInt();
+
+                        for (Car c : list) {
+                            if (c.id == rid && !c.isRented) {
+                                c.isRented = true;
+                                System.out.println("Car Rented!");
+                                break;
+                            }
+                        }
+                    } else {
+                        System.out.print("Enter Name: ");
+                        String rname = sc.nextLine();
+
+                        for (Car c : list) {
+                            if (c.name.equalsIgnoreCase(rname) && !c.isRented) {
+                                c.isRented = true;
+                                System.out.println("Car Rented!");
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                // RETURN
+                case 4:
+                    System.out.println("1. Return by ID");
+                    System.out.println("2. Return by Name");
+                    int rc2 = sc.nextInt();
+                    sc.nextLine();
+
+                    if (rc2 == 1) {
+                        System.out.print("Enter ID: ");
+                        int rid = sc.nextInt();
+
+                        for (Car c : list) {
+                            if (c.id == rid && c.isRented) {
+                                c.isRented = false;
+                                System.out.println("Car Returned!");
+                                break;
+                            }
+                        }
+                    } else {
+                        System.out.print("Enter Name: ");
+                        String rname = sc.nextLine();
+
+                        for (Car c : list) {
+                            if (c.name.equalsIgnoreCase(rname) && c.isRented) {
+                                c.isRented = false;
+                                System.out.println("Car Returned!");
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                // SEARCH
+                case 5:
+                    System.out.println("1. Search by Name");
+                    System.out.println("2. Search by ID");
+                    int sc2 = sc.nextInt();
+                    sc.nextLine();
+
+                    if (sc2 == 1) {
+                        System.out.print("Enter Name: ");
+                        String sname = sc.nextLine();
+
+                        for (Car c : list) {
+                            if (c.name.toLowerCase().contains(sname.toLowerCase())) {
+                                System.out.println("ID: " + c.id + ", Name: " + c.name);
+                            }
+                        }
+                    } else {
+                        System.out.print("Enter ID: ");
+                        int sid = sc.nextInt();
+
+                        for (Car c : list) {
+                            if (c.id == sid) {
+                                System.out.println("ID: " + c.id + ", Name: " + c.name);
+                            }
+                        }
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Exiting...");
+                    return;
+            }
+        }
+    }
+}
+
+class Car {
+    int id;
+    String name;
+    double price;
+    boolean isRented;
+
+    Car(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.isRented = false;
+    }
+}

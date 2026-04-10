@@ -1,0 +1,190 @@
+import java.util.*;
+public class LibraryManagement {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Book> list = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n--- Library Management System ---");
+            System.out.println("1. Add Book");
+            System.out.println("2. View Books");
+            System.out.println("3. Search Book");
+            System.out.println("4. Issue Book");
+            System.out.println("5. Return Book");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+    case 1:
+    System.out.print("Enter Book ID: ");
+    int id = sc.nextInt();
+    sc.nextLine();
+
+    String name;
+    while (true) {
+        System.out.print("Enter Book Name: ");
+        name = sc.nextLine();
+
+        if (!name.trim().isEmpty()) {
+            break;
+        }
+        System.out.println("Book name cannot be empty!");
+    }
+
+    list.add(new Book(id, name));
+    System.out.println("Book Added!");
+    break;
+
+                case 2:
+                    if (list.isEmpty()) {
+                        System.out.println("No books available.");
+                    } else {
+                        for (Book b : list) {
+                            String status = b.isIssued ? "Issued" : "Available";
+                            System.out.println("ID: " + b.id + ", Name: " + b.name + ", Status: " + status);
+                        }
+                    }
+                    break;
+
+                // 🔍 SEARCH BOOK
+                case 3:
+                    System.out.println("1. Search by Name");
+                    System.out.println("2. Search by ID");
+                    System.out.print("Enter choice: ");
+                    int searchChoice = sc.nextInt();
+                    sc.nextLine();
+
+                    if (searchChoice == 1) {
+                        System.out.print("Enter name: ");
+                        String searchName = sc.nextLine().toLowerCase();
+
+                        boolean found = false;
+                        for (Book b : list) {
+                            if (b.name.toLowerCase().contains(searchName)) {
+                                System.out.println("ID: " + b.id + ", Name: " + b.name);
+                                found = true;
+                            }
+                        }
+                        if (!found) System.out.println("Book not found.");
+
+                    } else if (searchChoice == 2) {
+                        System.out.print("Enter ID: ");
+                        int searchId = sc.nextInt();
+
+                        boolean found = false;
+                        for (Book b : list) {
+                            if (b.id == searchId) {
+                                System.out.println("ID: " + b.id + ", Name: " + b.name);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) System.out.println("Book not found.");
+                    }
+                    break;
+
+                // 📕 ISSUE BOOK
+   case 4:
+    System.out.println("1. Issue by ID");
+    System.out.println("2. Issue by Name");
+    System.out.print("Enter choice: ");
+    int issueChoice = sc.nextInt();
+    sc.nextLine();
+
+    if (issueChoice == 1) {
+        System.out.print("Enter Book ID: ");
+        int issueId = sc.nextInt();
+
+        boolean issued = false;
+        for (Book b : list) {
+            if (b.id == issueId && !b.isIssued) {
+                b.isIssued = true;
+                System.out.println("Book Issued!");
+                issued = true;
+                break;
+            }
+        }
+        if (!issued) {
+            System.out.println("Book not available.");
+        }
+
+    } else if (issueChoice == 2) {
+        System.out.print("Enter Book Name: ");
+        String issueName = sc.nextLine();
+
+        boolean issued = false;
+        for (Book b : list) {
+            if (b.name.equalsIgnoreCase(issueName) && !b.isIssued) {
+                b.isIssued = true;
+                System.out.println("Book Issued: " + b.name);
+                issued = true;
+                break;
+            }
+        }
+        if (!issued) {
+            System.out.println("Book not available.");
+        }
+
+    } else {
+        System.out.println("Invalid choice!");
+    }
+    break;
+
+    // 📗 RETURN BOOK
+    case 5:
+    System.out.println("1. Return by ID");
+    System.out.println("2. Return by Name");
+    System.out.print("Enter choice: ");
+    int returnChoice = sc.nextInt();
+    sc.nextLine();
+
+    if (returnChoice == 1) {
+        System.out.print("Enter Book ID: ");
+        int returnId = sc.nextInt();
+
+        boolean returned = false;
+        for (Book b : list) {
+            if (b.id == returnId && b.isIssued) {
+                b.isIssued = false;
+                System.out.println("Book Returned!");
+                returned = true;
+                break;
+            }
+        }
+        if (!returned) System.out.println("Invalid Book ID.");
+
+    } else if (returnChoice == 2) {
+        System.out.print("Enter Book Name: ");
+        String returnName = sc.nextLine().toLowerCase();
+
+        boolean returned = false;
+        for (Book b : list) {
+            if (b.name.toLowerCase().contains(returnName) && b.isIssued) {
+                b.isIssued = false;
+                System.out.println("Book Returned: " + b.name);
+                returned = true;
+            }
+        }
+        if (!returned) System.out.println("Book not found or not issued.");
+    }
+    break;
+            }
+        }
+    }
+}
+
+class Book {
+    int id;
+    String name;
+    boolean isIssued;
+
+    Book(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.isIssued = false;
+    }
+}

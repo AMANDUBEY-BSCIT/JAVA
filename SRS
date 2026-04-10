@@ -1,0 +1,113 @@
+import java.util.*;
+
+class Student {
+    int roll;
+    String name;
+    int marks;
+
+    Student(int roll, String name, int marks) {
+        this.roll = roll;
+        this.name = name;
+        this.marks = marks;
+    }
+
+    String getGrade() {
+        if (marks >= 90) return "A";
+        else if (marks >= 75) return "B";
+        else if (marks >= 50) return "C";
+        else return "Fail";
+    }
+}
+
+public class StudentResultSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> list = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n--- Student Result System ---");
+            System.out.println("1. Add Result");
+            System.out.println("2. View Results");
+            System.out.println("3. Search Result");
+            System.out.println("4. Update Result");
+            System.out.println("5. Delete Result");
+            System.out.println("6. Exit");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                // ADD
+                case 1:
+                    System.out.print("Enter Roll No: ");
+                    int roll = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Marks: ");
+                    int marks = sc.nextInt();
+
+                    list.add(new Student(roll, name, marks));
+                    System.out.println("Result Added!");
+                    break;
+
+                // VIEW
+                case 2:
+                    for (Student s : list) {
+                        System.out.println("Roll: " + s.roll + ", Name: " + s.name +
+                                ", Marks: " + s.marks + ", Grade: " + s.getGrade());
+                    }
+                    break;
+
+                // SEARCH
+                case 3:
+                    System.out.println("1. Search by Name");
+                    System.out.println("2. Search by Roll");
+                    int ch = sc.nextInt();
+                    sc.nextLine();
+
+                    if (ch == 1) {
+                        String n = sc.nextLine();
+                        for (Student s : list) {
+                            if (s.name.toLowerCase().contains(n.toLowerCase())) {
+                                System.out.println(s.name + " " + s.marks);
+                            }
+                        }
+                    } else {
+                        int r = sc.nextInt();
+                        for (Student s : list) {
+                            if (s.roll == r) {
+                                System.out.println(s.name + " " + s.marks);
+                            }
+                        }
+                    }
+                    break;
+
+                // UPDATE
+                case 4:
+                    int ur = sc.nextInt();
+                    for (Student s : list) {
+                        if (s.roll == ur) {
+                            s.marks = sc.nextInt();
+                            System.out.println("Updated!");
+                            break;
+                        }
+                    }
+                    break;
+
+                // DELETE
+                case 5:
+                    int dr = sc.nextInt();
+                    list.removeIf(s -> s.roll == dr);
+                    System.out.println("Deleted!");
+                    break;
+
+                case 6:
+                    return;
+            }
+        }
+    }
+}

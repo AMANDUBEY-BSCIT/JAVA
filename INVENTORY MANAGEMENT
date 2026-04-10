@@ -1,0 +1,193 @@
+import java.util.*;
+public class InventoryManagement {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Product> list = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n--- Inventory Management System ---");
+            System.out.println("1. Add Product");
+            System.out.println("2. View Products");
+            System.out.println("3. Search Product");
+            System.out.println("4. Update Product");
+            System.out.println("5. Delete Product");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+
+                // ➕ ADD PRODUCT
+                case 1:
+                    System.out.print("Enter Product ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    String name;
+                    while (true) {
+                        System.out.print("Enter Product Name: ");
+                        name = sc.nextLine();
+                        if (!name.trim().isEmpty()) break;
+                        System.out.println("Product name cannot be empty!");
+                    }
+
+                    System.out.print("Enter Quantity: ");
+                    int qty = sc.nextInt();
+
+                    System.out.print("Enter Price: ");
+                    double price = sc.nextDouble();
+
+                    list.add(new Product(id, name, qty, price));
+                    System.out.println("Product Added!");
+                    break;
+
+                // 📋 VIEW PRODUCTS
+                case 2:
+                    if (list.isEmpty()) {
+                        System.out.println("No products available.");
+                    } else {
+                        for (Product p : list) {
+                            System.out.println("ID: " + p.id + ", Name: " + p.name +
+                                    ", Qty: " + p.quantity + ", Price: " + p.price);
+                        }
+                    }
+                    break;
+
+                // 🔍 SEARCH PRODUCT
+                case 3:
+                    System.out.println("1. Search by Name");
+                    System.out.println("2. Search by ID");
+                    System.out.print("Enter choice: ");
+                    int searchChoice = sc.nextInt();
+                    sc.nextLine();
+
+                    if (searchChoice == 1) {
+                        System.out.print("Enter name: ");
+                        String searchName = sc.nextLine().toLowerCase();
+
+                        boolean found = false;
+                        for (Product p : list) {
+                            if (p.name.toLowerCase().contains(searchName)) {
+                                System.out.println("ID: " + p.id + ", Name: " + p.name +
+                                        ", Qty: " + p.quantity + ", Price: " + p.price);
+                                found = true;
+                            }
+                        }
+                        if (!found) System.out.println("Product not found.");
+
+                    } else if (searchChoice == 2) {
+                        System.out.print("Enter ID: ");
+                        int searchId = sc.nextInt();
+
+                        boolean found = false;
+                        for (Product p : list) {
+                            if (p.id == searchId) {
+                                System.out.println("ID: " + p.id + ", Name: " + p.name +
+                                        ", Qty: " + p.quantity + ", Price: " + p.price);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) System.out.println("Product not found.");
+                    }
+                    break;
+
+                // ✏️ UPDATE PRODUCT
+                case 4:
+                    System.out.print("Enter Product ID to update: ");
+                    int upId = sc.nextInt();
+                    sc.nextLine();
+
+                    boolean updated = false;
+                    for (Product p : list) {
+                        if (p.id == upId) {
+
+                            System.out.print("Enter New Name: ");
+                            p.name = sc.nextLine();
+
+                            System.out.print("Enter New Quantity: ");
+                            p.quantity = sc.nextInt();
+
+                            System.out.print("Enter New Price: ");
+                            p.price = sc.nextDouble();
+
+                            System.out.println("Product Updated!");
+                            updated = true;
+                            break;
+                        }
+                    }
+                    if (!updated) System.out.println("Product not found.");
+                    break;
+
+                // ❌ DELETE PRODUCT
+                case 5:
+                    System.out.println("1. Delete by ID");
+                    System.out.println("2. Delete by Name");
+                    System.out.print("Enter choice: ");
+                    int deleteChoice = sc.nextInt();
+                    sc.nextLine();
+
+                    if (deleteChoice == 1) {
+                        System.out.print("Enter Product ID: ");
+                        int delId = sc.nextInt();
+
+                        boolean removed = false;
+                        Iterator<Product> it = list.iterator();
+                        while (it.hasNext()) {
+                            Product p = it.next();
+                            if (p.id == delId) {
+                                it.remove();
+                                System.out.println("Product Deleted!");
+                                removed = true;
+                                break;
+                            }
+                        }
+                        if (!removed) System.out.println("Product not found.");
+
+                    } else if (deleteChoice == 2) {
+                        System.out.print("Enter Name: ");
+                        String delName = sc.nextLine().toLowerCase();
+
+                        boolean removed = false;
+                        Iterator<Product> it = list.iterator();
+                        while (it.hasNext()) {
+                            Product p = it.next();
+                            if (p.name.toLowerCase().contains(delName)) {
+                                it.remove();
+                                removed = true;
+                            }
+                        }
+                        if (removed) {
+                            System.out.println("Product(s) Deleted!");
+                        } else {
+                            System.out.println("Product not found.");
+                        }
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Exiting...");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
+
+class Product {
+    int id;
+    String name;
+    int quantity;
+    double price;
+
+    Product(int id, String name, int quantity, double price) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+    }
+}
